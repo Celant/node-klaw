@@ -1,22 +1,17 @@
-Node.js - klaw
+Node.js - klaw-redux
 ==============
 
 <a href="https://standardjs.com" style="float: right; padding: 0 0 20px 20px;"><img src="https://cdn.rawgit.com/feross/standard/master/sticker.svg" alt="JavaScript Standard Style" width="100" align="right"></a>
 
-A Node.js file system walker extracted from [fs-extra](https://github.com/jprichardson/node-fs-extra).
+A redux version of Klaw designed to be more like [klaw-sync](https://github.com/manidlou/node-klaw-sync), and more user-friendly as a result.
 
-[![npm Package](https://img.shields.io/npm/v/klaw.svg?style=flat-square)](https://www.npmjs.org/package/klaw)
-[![build status](https://api.travis-ci.org/jprichardson/node-klaw.svg)](http://travis-ci.org/jprichardson/node-klaw)
-[![windows build status](https://ci.appveyor.com/api/projects/status/github/jprichardson/node-klaw?branch=master&svg=true)](https://ci.appveyor.com/project/jprichardson/node-klaw/branch/master)
+[![npm Package](https://img.shields.io/npm/v/klaw-redux.svg?style=flat-square)](https://www.npmjs.org/package/klaw-redux)
+[![build status](https://api.travis-ci.org/Celant/node-klaw-redux.svg)](http://travis-ci.org/Celant/node-klaw-redux)
 
 Install
 -------
 
-    npm i --save klaw
-
-If you're using Typescript, we've got [types](https://github.com/DefinitelyTyped/DefinitelyTyped/pull/11492/files):
-
-    npm i --save-dev @types/klaw
+    npm i --save klaw-redux
 
 
 Name
@@ -47,7 +42,9 @@ the following:
   - `queueMethod` (`string`, default: `'shift'`): Either `'shift'` or `'pop'`. On `readdir()` array, call either `shift()` or `pop()`.
   - `pathSorter` (`function`, default: `undefined`): Sorting [function for Arrays](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
   - `fs` (`object`, default: [`graceful-fs`](https://github.com/isaacs/node-graceful-fs)): Use this to hook into the `fs` methods or to use [`mock-fs`](https://github.com/tschaub/mock-fs)
-  - `filter` (`function`, default: `undefined`): Filtering [function for Arrays](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter)
+  - `nodir` (`bool`, default: `false`): Return only files (excludes all directories)
+  - `nofile` (`bool`, default: `true`): Return only directories (excludes all files)
+  - `filter` (`function`, default: `undefined`): Function that gets one argument fn({path: '', stats: {}}) and returns true to include or false to exclude the item
   - `depthLimit` (`number`, default: `undefined`): The number of times to recurse before stopping. -1 for unlimited.
 
 **Streams 1 (push) example:**
@@ -75,6 +72,23 @@ klaw('/some/dir')
     }
   })
   .on('end', () => console.dir(items)) // => [ ... array of files]
+```
+
+**Filter functions:**
+
+```js
+const klaw = require('klaw')
+const path = require('path')
+
+const filterFunc = function(item) {
+  const basename = path.basename(item.path) // get the file name
+  return basename === '.' || basename[0] !== '.' // exclude the file if it's name begins with a dot
+}
+
+klaw('/some/dir', { filter: filterFunc })
+  .on('data', item => {
+    // only items of none hidden folders will reach here
+  })
 ```
 
 ### Error Handling
@@ -133,22 +147,6 @@ klaw('/some/dir')
   .on('end', () => console.dir(items)) // => [ ... array of files without directories]
 ```
 
-**Example (ignore hidden directories):**
-
-```js
-const klaw = require('klaw')
-const path = require('path')
-
-const filterFunc = item => {
-  const basename = path.basename(item)
-  return basename === '.' || basename[0] !== '.'
-}
-
-klaw('/some/dir', { filter: filterFunc })
-  .on('data', item => {
-    // only items of none hidden folders will reach here
-  })
-```
 
 **Example (totaling size of PNG files):**
 
@@ -247,6 +245,10 @@ is recursively iterated. See the code for more details, it's less than 50 lines 
 License
 -------
 
+Original code and concept is credited to [JP Richardson](https://github.com/jprichardson)
+It lives at the [klaw repo](https://github.com/jprichardson/node-klaw) under the MIT license.
+
+
 MIT
 
-Copyright (c) 2015 [JP Richardson](https://github.com/jprichardson)
+Copyright (c) 2017 [Josh Harris](https://github.com/celant)

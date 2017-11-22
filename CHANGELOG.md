@@ -1,3 +1,15 @@
+1.0.0 / 2017-11-22
+------------------
+
+- First release of Redux, massively changed the way filters work
+
+
+
+Redux Release
+------------------
+
+
+
 2.1.1 / 2017-11-18
 ------------------
 

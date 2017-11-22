@@ -14,8 +14,9 @@ test('should not fire event on filtered items', function (t, testDir) {
   })
 
   var items = []
-  var filter = function (filepath) {
-    return path.basename(filepath) !== 'a'
+  var filter = function (file) {
+    console.log("Filtering: ", file.path)
+    return path.basename(file.path) !== 'k.txt'
   }
 
   klaw(testDir, {filter: filter})
@@ -30,6 +31,7 @@ test('should not fire event on filtered items', function (t, testDir) {
       })
       expected.unshift(testDir)
 
+      console.log(items);
       t.ok(items.length < fixtures.length, 'we should see less items due to filter')
       t.end()
     })

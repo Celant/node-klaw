@@ -1,13 +1,22 @@
 sudo: false
 language: node_js
 node_js:
-  - "4"
-  - "6"
-  - "8"
+- '4'
+- '6'
+- '8'
 matrix:
   include:
-    - node_js: "6"
-      env: TEST_SUITE=lint
+  - node_js: '6'
+    env: TEST_SUITE=lint
 env:
-  - TEST_SUITE=unit
+- TEST_SUITE=unit
 script: npm run-script $TEST_SUITE
+deploy:
+  provider: npm
+  email: me@celant.co.uk
+  api_key:
+    secure: YPdMnDuJmgU5FQUMFUVgU+vkTapNnfNY+QAU8z1AMcqhrauxyBuSBktAgDtVENC9m5is4CvvZRbJabCJQl1Pe4cCT/o1fBOT/vMbuCdNZuz7a7ZPQ3cKkAQ6SEf7P1VfewTDLtF/13Vflm4OdZ/ah1jc7ck4iXWLCJ5oGuCgZYVqwh2Hn1kNVAPMaz0SsSPgYhkDJCPUsZqWazoEmwrCNOexja0Es5hRkwNEW7KykexgrKgQBqvrK8sLmHacsvsoDfTg9M8yGewKGmyaVvw07eZsEC0eEI9hUECeB41Yua3pwyTI+o44LefhSkhHIug08HE/1zgvFsOa40QM9a5Gc/cL59ZAoOHXefj8S5tEYw56rgJRBQ3YwgObSenoznxIf0ApJSZEPvPRaYuKZVpHrxOcNUOUdvNceToViTuRju0hJDER6H/7E3JpOTrWHxnY69iOKcf+G3kOsFat0BL0TOBO5wc1WTT4m2zItVkoErdmo2gRbZETGuHkaU1jVkeJ5q4zcOCSXn9CSVMKWzr+DFC5i5D+0p7ti8ZhsGrMNs543frEljSALBWpSM0E9U3NQc4lhcaPH4fwux+NEPTtyzJqz45UJlH6VCUIHYFIqjGO9HhrDiOTIxErgPCD8DpPVe67MQ/1LhkFQEdK/vJuJTCQdZ7N1KWlPuky+tl6KHM=
+  on:
+    tags: true
+    repo: Celant/node-klaw-redux
+    branch: master
